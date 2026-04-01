@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { io as ClientIo } from "socket.io-client";
 
 // const backendURL = import.meta.env.VITE_BACKEND_URL || "http://localhost:7000";
-const backendURL = import.meta.env.VITE_BACKEND_URL || "https://chatapp-backend-5-bulh.onrender.com/";
+const backendURL = import.meta.env.VITE_BACKEND_URL || "https://chatapp-backend-a2s2.onrender.com";
 // console.log("Backend URL:", backendURL);
 
 axios.defaults.baseURL = backendURL;
