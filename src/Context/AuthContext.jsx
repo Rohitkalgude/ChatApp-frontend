@@ -5,7 +5,7 @@ import { io as ClientIo } from "socket.io-client";
 
 // const backendURL = import.meta.env.VITE_BACKEND_URL || "http://localhost:7000";
 const backendURL = import.meta.env.VITE_BACKEND_URL || "https://chatapp-backend-5-bulh.onrender.com/";
-console.log("Backend URL:", backendURL);
+// console.log("Backend URL:", backendURL);
 
 axios.defaults.baseURL = backendURL;
 axios.defaults.withCredentials = true;
@@ -56,8 +56,8 @@ export const AuthProvider = ({ children }) => {
         const newUser = res.data.data.user;
 
         localStorage.setItem("userData", JSON.stringify(newUser));
-        setUser(newUser); 
-        connectSocket(newUser._id); 
+        setUser(newUser);
+        connectSocket(newUser._id);
         toast.success("Register successfully");
       }
 
@@ -162,7 +162,10 @@ export const AuthProvider = ({ children }) => {
 
   const getCurrentUser = async () => {
     try {
-      const res = await axios.get("/api/v1/auth/currentuser");
+      const token = localStorage.getItem("token");
+      const res = await axios.get("/api/v1/auth/currentuser", {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
 
       if (res.data.success) {
         setUser(res.data.data);
