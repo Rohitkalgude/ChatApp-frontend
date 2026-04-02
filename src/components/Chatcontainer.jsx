@@ -121,7 +121,6 @@ function Chatcontainer({ onSelectUser }) {
                     : "https://avatar.iran.liara.run/public/boy?username=" + user.fullName
                 }
                 alt={user.fullName}
-                onError={(e) => e.target.src = "https://avatar.iran.liara.run/public/boy?username=" + user.fullName}
                 className="w-12 h-12 rounded-full object-cover shadow-sm"
               />
 
