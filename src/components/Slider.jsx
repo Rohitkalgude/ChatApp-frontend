@@ -29,6 +29,7 @@ function Slider() {
                   : "https://avatar.iran.liara.run/public/boy?username=" + (user?.fullName || "User")
               }
               alt="Profile"
+              onError={(e) => e.target.src = "https://avatar.iran.liara.run/public/boy?username=" + (user?.fullName || "User")}
               onClick={() => navigate("/profile")}
               className="w-full h-full object-cover shadow-sm hover:opacity-80 transition-opacity"
             />

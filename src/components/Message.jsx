@@ -116,6 +116,7 @@ function Message({ user }) {
                 : "https://avatar.iran.liara.run/public/boy?username=" + (user?.fullName || "User")
             }
             alt="Profile"
+            onError={(e) => e.target.src = "https://avatar.iran.liara.run/public/boy?username=" + (user?.fullName || "User")}
             className="w-10 h-10 rounded-full object-cover"
           />
 
@@ -161,6 +162,7 @@ function Message({ user }) {
                   : "https://avatar.iran.liara.run/public/boy?username=" + (user?.fullName || "User")
               }
               alt={user?.fullName}
+              onError={(e) => e.target.src = "https://avatar.iran.liara.run/public/boy?username=" + (user?.fullName || "User")}
               className="w-24 h-24 rounded-full object-cover shadow-md border-2 border-gray-700"
             />
 
