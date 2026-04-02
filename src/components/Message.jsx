@@ -109,11 +109,9 @@ function Message({ user }) {
         >
           <img
             src={
-              user?.profilePic
-                ? user.profilePic.startsWith("http")
-                  ? user.profilePic
-                  : `${baseUrl}${user.profilePic.replace(/^\/+/, "")}`
-                : "https://avatar.iran.liara.run/public/boy?username=" + (user?.fullName || "User")
+              user?.profilePic?.startsWith("http")
+                ? user.profilePic
+                : `${baseUrl}${user.profilePic}`
             }
             alt="Profile"
             className="w-10 h-10 rounded-full object-cover"
@@ -157,8 +155,8 @@ function Message({ user }) {
                 user?.profilePic
                   ? user.profilePic.startsWith("http")
                     ? user.profilePic
-                    : `${baseUrl}${user.profilePic.replace(/^\/+/, "")}`
-                  : "https://avatar.iran.liara.run/public/boy?username=" + (user?.fullName || "User")
+                    : `${baseUrl}${user.profilePic}`
+                  : BgImage
               }
               alt={user?.fullName}
               className="w-24 h-24 rounded-full object-cover shadow-md border-2 border-gray-700"
@@ -188,7 +186,7 @@ function Message({ user }) {
                       window.open(
                         msg.media.url.startsWith("http")
                           ? msg.media.url
-                          : `${baseUrl}${msg.media.url.replace(/^\/+/, "")}`,
+                          : `${baseUrl}${msg.media.url}`,
                         "_blank"
                       )
                     }
@@ -198,7 +196,7 @@ function Message({ user }) {
                         src={
                           msg.media.url.startsWith("http")
                             ? msg.media.url
-                            : `${baseUrl}${msg.media.url.replace(/^\/+/, "")}`
+                            : `${baseUrl}${msg.media.url}`
                         }
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                       />
@@ -207,7 +205,7 @@ function Message({ user }) {
                         src={
                           msg.media.url.startsWith("http")
                             ? msg.media.url
-                            : `${baseUrl}${msg.media.url.replace(/^\/+/, "")}`
+                            : `${baseUrl}${msg.media.url}`
                         }
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                         muted
@@ -274,29 +272,29 @@ function Message({ user }) {
                     <div className="media-container w-full max-w-[300px] rounded-lg overflow-hidden mb-1">
                       {msg.media.type === "image" && (
                         <img
-                          src={msg.media.url.startsWith("http") ? msg.media.url : `${baseUrl}${msg.media.url.replace(/^\/+/, "")}`}
+                          src={msg.media.url.startsWith("http") ? msg.media.url : `${baseUrl}${msg.media.url}`}
                           alt="message"
                           className="w-full h-auto object-cover cursor-pointer"
-                          onClick={() => window.open(msg.media.url.startsWith("http") ? msg.media.url : `${baseUrl}${msg.media.url.replace(/^\/+/, "")}`, "_blank")}
+                          onClick={() => window.open(msg.media.url.startsWith("http") ? msg.media.url : `${baseUrl}${msg.media.url}`, "_blank")}
                         />
                       )}
                       {msg.media.type === "video" && (
                         <video
-                          src={msg.media.url.startsWith("http") ? msg.media.url : `${baseUrl}${msg.media.url.replace(/^\/+/, "")}`}
+                          src={msg.media.url.startsWith("http") ? msg.media.url : `${baseUrl}${msg.media.url}`}
                           controls
                           className="w-full h-auto"
                         />
                       )}
                       {msg.media.type === "audio" && (
                         <audio
-                          src={msg.media.url.startsWith("http") ? msg.media.url : `${baseUrl}${msg.media.url.replace(/^\/+/, "")}`}
+                          src={msg.media.url.startsWith("http") ? msg.media.url : `${baseUrl}${msg.media.url}`}
                           controls
                           className="w-full"
                         />
                       )}
                       {msg.media.type === "file" && (
                         <a
-                          href={msg.media.url.startsWith("http") ? msg.media.url : `${baseUrl}${msg.media.url.replace(/^\/+/, "")}`}
+                          href={msg.media.url.startsWith("http") ? msg.media.url : `${baseUrl}${msg.media.url}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center gap-3 p-3 bg-[#1a1a1a] rounded-lg border border-gray-700 hover:bg-[#252525] transition-colors decoration-none text-inherit"
