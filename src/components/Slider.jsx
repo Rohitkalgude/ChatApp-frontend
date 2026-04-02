@@ -20,23 +20,18 @@ function Slider() {
       <div className="bg-[#1f1f1f] h-screen w-20 flex flex-col items-center justify-between text-white">
         <div className="flex flex-col items-center gap-6">
           <div className="w-12 h-12 rounded-full border border-gray-500 mt-3 overflow-hidden cursor-pointer">
-            {user?.profilePic ? (
-              <img
-                src={
-                  user.profilePic.startsWith("http")
+            <img
+              src={
+                user?.profilePic
+                  ? user.profilePic.startsWith("http")
                     ? user.profilePic
-                    : `${baseUrl}${user.profilePic}`
-                }
-                alt="Profile"
-                onClick={() => navigate("/profile")}
-                className="w-full h-full object-cover shadow-sm hover:opacity-80 transition-opacity"
-              />
-
-            ) : (
-              <div className="w-full h-full bg-gray-700 flex items-center justify-center text-sm">
-                No Img
-              </div>
-            )}
+                    : `${baseUrl}${user.profilePic.replace(/^\/+/, "")}`
+                  : "https://avatar.iran.liara.run/public/boy?username=" + (user?.fullName || "User")
+              }
+              alt="Profile"
+              onClick={() => navigate("/profile")}
+              className="w-full h-full object-cover shadow-sm hover:opacity-80 transition-opacity"
+            />
           </div>
 
           <div className="mt-8 gap-6 items-center flex flex-col">
