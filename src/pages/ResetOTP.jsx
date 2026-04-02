@@ -69,7 +69,7 @@ function ResetOTP() {
       const body = { email: ForgetpasswordData.email, emailOtp: otpString };
 
       const result = await axios.post(
-        "http://localhost:8000/api/v1/auth/verifyPasswordOtp",
+        "/api/v1/auth/verifyPasswordOtp",
         body
       );
 

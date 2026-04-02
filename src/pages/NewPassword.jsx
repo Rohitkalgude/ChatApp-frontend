@@ -33,7 +33,7 @@ function NewPassword() {
       };
 
       const result = await axios.post(
-        "http://localhost:8000/api/v1/auth/newPassword",
+        "/api/v1/auth/newPassword",
         body
       );
       toast.success(result.data.message || "Password updated successfully");
