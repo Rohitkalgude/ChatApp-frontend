@@ -114,9 +114,11 @@ function Chatcontainer({ onSelectUser }) {
             >
               <img
                 src={
-                  user.profilePic?.startsWith("http")
-                    ? user.profilePic
-                    : `${baseUrl}${user.profilePic}`
+                  user.profilePic
+                    ? user.profilePic.startsWith("http")
+                      ? user.profilePic
+                      : `${baseUrl}${user.profilePic.replace(/^\/+/, "")}`
+                    : "https://avatar.iran.liara.run/public/boy?username=" + user.fullName
                 }
                 alt={user.fullName}
                 className="w-12 h-12 rounded-full object-cover shadow-sm"
