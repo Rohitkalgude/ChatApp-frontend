@@ -45,7 +45,6 @@ function Chatcontainer({ onSelectUser }) {
 
   const handleSelect = (user) => {
     onSelectUser(user);
-    getMessage(user._id);
   };
 
   const filterUser = users.filter((user) =>

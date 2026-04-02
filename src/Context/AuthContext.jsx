@@ -1,10 +1,9 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useRef } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { io as ClientIo } from "socket.io-client";
 
-// const backendURL = import.meta.env.VITE_BACKEND_URL || "http://localhost:7000";
-const backendURL = import.meta.env.VITE_BACKEND_URL || "https://chatapp-backend-a2s2.onrender.com";
+const backendURL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8000";
 // console.log("Backend URL:", backendURL);
 
 axios.defaults.baseURL = backendURL;
@@ -18,16 +17,26 @@ export const AuthProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [onlineUser, setonlineUser] = useState([]);
 
+  const connectingRef = useRef(false);
   const connectSocket = (userId) => {
-    if (socket) return;
+    if (socket || connectingRef.current) return;
+
+    connectingRef.current = true;
 
     const newSocket = ClientIo(backendURL, {
       query: { userId },
       withCredentials: true,
+      transports: ["websocket"], // Use WebSockets instead of long-polling
     });
 
     newSocket.on("connect", () => {
       console.log("Socket connected");
+      connectingRef.current = false;
+    });
+
+    newSocket.on("connect_error", (error) => {
+      console.log("Socket connection error", error);
+      connectingRef.current = false;
     });
 
     newSocket.on("getOnlineUsers", (users) => {
@@ -179,7 +188,12 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    getCurrentUser();
+    const token = localStorage.getItem("token");
+    if (token) {
+      getCurrentUser();
+    } else {
+      setLoading(false);
+    }
     return () => disconnectSocket();
   }, []);
 

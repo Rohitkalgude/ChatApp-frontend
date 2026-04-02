@@ -33,6 +33,7 @@ export const ChatProvider = ({ children }) => {
   };
 
   const getMessage = async (userId) => {
+    if (selectedUser === userId) return; // Prevent duplicate call if same user is selected
     try {
       const token = localStorage.getItem("token");
 

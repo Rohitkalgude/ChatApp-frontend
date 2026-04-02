@@ -92,7 +92,7 @@ function OTP() {
       };
 
       const result = await axios.post(
-        "http://localhost:7000/api/v1/auth/resendOtp",
+        "http://localhost:8000/api/v1/auth/resendOtp",
         body
       );
 
