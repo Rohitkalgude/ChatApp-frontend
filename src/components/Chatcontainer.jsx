@@ -11,11 +11,10 @@ function Chatcontainer({ onSelectUser }) {
   const navigate = useNavigate();
   const menuRef = useRef();
 
-  const { users, unseensMessage, allUser, getMessage, markRead } =
+  const { users, unseensMessage, allUser } =
     useContext(ChatContext);
 
   const { logoutUser, onlineUser, baseUrl } = useContext(AuthContext);
-
 
   useEffect(() => {
     allUser();
@@ -48,7 +47,7 @@ function Chatcontainer({ onSelectUser }) {
   };
 
   const filterUser = users.filter((user) =>
-    user.fullName.toLowerCase().includes(search.toLowerCase())
+    user.fullName.toLowerCase().includes(search.toLowerCase()),
   );
 
   return (
@@ -90,8 +89,8 @@ function Chatcontainer({ onSelectUser }) {
         </div>
       </div>
 
-      <div className="flex items-center mt-3 mx-3 p-3 bg-[#1f1f1f] rounded-full">
-        <Search className="text-gray-400" size={20} />
+      <div className="flex items-center mt-3 mx-3 p-3 bg-[#1f1f1f] rounded-full shrink-0">
+        <Search className="text-gray-400 shrink-0" size={20} />
         <input
           type="text"
           placeholder="Search or start a new chat"
@@ -101,7 +100,7 @@ function Chatcontainer({ onSelectUser }) {
         />
       </div>
 
-      <div className="mt-3 overflow-y-auto">
+      <div className="mt-3 overflow-y-auto flex-1 pb-16 md:pb-0">
         {filterUser.length === 0 ? (
           <p className="text-center text-gray-400 mt-5">No users found</p>
         ) : (
@@ -112,18 +111,23 @@ function Chatcontainer({ onSelectUser }) {
               className="flex items-center gap-4 p-4 mx-2 rounded-xl cursor-pointer 
                        hover:bg-[#2a2a2a] transition-all"
             >
-              <img
-                src={
-                  user.profilePic?.startsWith("http")
-                    ? user.profilePic
-                    : `${baseUrl}${user.profilePic}`
-                }
-                alt={user.fullName}
-                className="w-12 h-12 rounded-full object-cover shadow-sm"
-              />
+              <div className="relative shrink-0">
+                <img
+                  src={
+                    user.profilePic?.startsWith("http")
+                      ? user.profilePic
+                      : `${baseUrl}${user.profilePic}`
+                  }
+                  alt={user.fullName}
+                  className="w-12 h-12 rounded-full object-cover shadow-sm"
+                />
+                {onlineUser.includes(user._id) && (
+                  <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-[#1f1f1f]" />
+                )}
+              </div>
 
-              <div className="flex flex-col">
-                <span className="text-lg font-medium">{user.fullName}</span>
+              <div className="flex flex-col min-w-0">
+                <span className="text-lg font-medium truncate">{user.fullName}</span>
                 {onlineUser.includes(user._id) ? (
                   <span className="text-green-400 text-xs">Online</span>
                 ) : (
@@ -132,7 +136,7 @@ function Chatcontainer({ onSelectUser }) {
               </div>
 
               {unseensMessage[user._id] > 0 && (
-                <span className="bg-red-600 text-white text-xs px-2 py-1 rounded-full ml-auto">
+                <span className="bg-red-600 text-white text-xs px-2 py-1 rounded-full ml-auto shrink-0">
                   {unseensMessage[user._id]}
                 </span>
               )}

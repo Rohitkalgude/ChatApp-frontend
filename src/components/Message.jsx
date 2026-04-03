@@ -1,15 +1,27 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Send, Plus, Info, MoreVertical, Copy, Trash2, File, Music, Video, Download, Smile } from "lucide-react";
+import {
+  Send,
+  Plus,
+  Info,
+  MoreVertical,
+  Copy,
+  Trash2,
+  File,
+  Music,
+  Video,
+  Download,
+  Smile,
+  ArrowLeft,
+} from "lucide-react";
 import EmojiPicker from "emoji-picker-react";
 import Timeformate from "../config/Timeformate";
-
 
 import BgImage from "../assets/bg.jpg";
 import { ChatContext } from "../Context/ChatContext";
 import { AuthContext } from "../Context/AuthContext";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 
-function Message({ user }) {
+function Message({ user, onBack }) {
   const [isOpen, setisOpen] = useState(false);
   const [text, setText] = useState("");
   const [selectedMsg, setSelectedMsg] = useState(null);
@@ -80,11 +92,17 @@ function Message({ user }) {
   useEffect(() => {
     const handleOutsideClick = (event) => {
       // Close Emoji Picker
-      if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
+      if (
+        emojiPickerRef.current &&
+        !emojiPickerRef.current.contains(event.target)
+      ) {
         setShowEmojiPicker(false);
       }
       // Close Message Options Menu
-      if (optionsMenuRef.current && !optionsMenuRef.current.contains(event.target)) {
+      if (
+        optionsMenuRef.current &&
+        !optionsMenuRef.current.contains(event.target)
+      ) {
         setSelectedMsg(null);
       }
     };
@@ -97,16 +115,22 @@ function Message({ user }) {
     };
   }, [showEmojiPicker, selectedMsg]);
 
-  const chatMedia = messages.filter((msg) => msg.media).slice(-12); // Show last 12 media items
-
+  const chatMedia = messages.filter((msg) => msg.media).slice(-12);
 
   return (
     <div className="flex flex-col w-full h-full">
-      <div onClick={() => setisOpen(true)}
-        className="px-4 h-[76px] bg-[#262626] border-b border-[#333] flex items-center justify-between text-white">
-        <div
-          className="flex items-center gap-4 cursor-pointer"
-        >
+      <div
+        onClick={() => setisOpen(true)}
+        className="px-4 h-[76px] bg-[#262626] border-b border-[#333] flex items-center justify-between text-white"
+      >
+        <div className="flex items-center gap-4 cursor-pointer">
+          <button
+            onClick={onBack}
+            className="md:hidden text-white hover:text-gray-300 transition-colors shrink-0 p-1 -ml-1"
+          >
+            <ArrowLeft size={22} />
+          </button>
+
           <img
             src={
               user?.profilePic?.startsWith("http")
@@ -117,15 +141,15 @@ function Message({ user }) {
             className="w-10 h-10 rounded-full object-cover"
           />
 
-
           <div className="flex flex-col">
             <h1 className="text-xl font-semibold">
               {user?.fullName || "Chat"}
             </h1>
             {onlineUser.includes(user?._id) ? (
               <span
-                className={`text-xs ${isTyping ? "text-yellow-400" : "text-green-400"
-                  }`}
+                className={`text-xs ${
+                  isTyping ? "text-yellow-400" : "text-green-400"
+                }`}
               >
                 {isTyping ? "Typing..." : "Online"}
               </span>
@@ -141,10 +165,21 @@ function Message({ user }) {
       </div>
 
       {isOpen && (
-        <div className="fixed top-0 right-0 w-[350px] h-full bg-[#1c1c1c] text-white shadow-xl border-l border-gray-700 animate-slideLeft z-50">
+        <div className="fixed top-0 right-0 w-full md:w-[350px]  h-full bg-[#1c1c1c] text-white shadow-xl border-l border-gray-700 animate-slideLeft z-50">
           <div className="flex justify-between items-center px-4 h-[76px] border-b border-gray-600">
-            <h1 className="text-xl font-semibold">Contact info</h1>
-            <button onClick={() => setisOpen(false)} className="text-xl">
+            <button
+              onClick={() => setisOpen(false)}
+              className="md:hidden text-gray-400 hover:text-white transition-colors p-1 -ml-1"
+            >
+              <ArrowLeft size={22} />
+            </button>
+            <h1 className="text-xl font-semibold absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0">
+              Contact info
+            </h1>
+            <button
+              onClick={() => setisOpen(false)}
+              className="text-xl hidden md:flex"
+            >
               ✖
             </button>
           </div>
@@ -179,7 +214,10 @@ function Message({ user }) {
 
             <div className="grid grid-cols-3 gap-3">
               {chatMedia.map((msg, i) => (
-                <div key={i} className="relative group overflow-hidden rounded-lg">
+                <div
+                  key={i}
+                  className="relative group overflow-hidden rounded-lg"
+                >
                   <div
                     className="w-full h-20 bg-[#2a2a2a] flex items-center justify-center cursor-pointer hover:bg-[#333] transition-colors overflow-hidden"
                     onClick={() =>
@@ -187,7 +225,7 @@ function Message({ user }) {
                         msg.media.url.startsWith("http")
                           ? msg.media.url
                           : `${baseUrl}${msg.media.url}`,
-                        "_blank"
+                        "_blank",
                       )
                     }
                   >
@@ -226,11 +264,9 @@ function Message({ user }) {
                         </span>
                       </div>
                     )}
-
                   </div>
                 </div>
               ))}
-
 
               {chatMedia.length === 0 && (
                 <p className="text-xs text-gray-500 col-span-3 text-center">
@@ -238,8 +274,6 @@ function Message({ user }) {
                 </p>
               )}
             </div>
-
-
           </div>
         </div>
       )}
@@ -250,96 +284,129 @@ function Message({ user }) {
           className="absolute inset-0 w-full h-full opacity-5 object-cover pointer-events-none"
         />
 
-        <div className="absolute inset-0 overflow-y-auto p-5 custom-scrollbar">
-          <div className="relative space-y-5">
+        <div className="absolute inset-0 overflow-y-auto px-3 py-4 sm:px-5 sm:py-5 custom-scrollbar">
+          <div className="relative space-y-4 sm:space-y-5">
             {messages.map((msg, i) => (
               <div
                 key={msg._id || i}
                 ref={i === messages.length - 1 ? scrollRef : null}
-                className={`flex items-end gap-2 ${msg.sender === "me" ? "justify-end" : "justify-start"
-                  }`}
+                className={`flex items-end gap-2 ${
+                  msg.sender === "me" ? "justify-end" : "justify-start"
+                }`}
                 onClick={(e) => e.stopPropagation()}
               >
-                {/* Message Bubble */}
                 <div
-                  className={`relative max-w-[75%] p-2 px-3 rounded-2xl text-sm shadow mt-2 flex flex-col gap-1 ${msg.sender === "me"
-                    ? "bg-green-600 text-white rounded-br-none ml-auto"
-                    : "bg-[#2d2d2d] text-gray-200 rounded-bl-none mr-auto"
-                    } group`}
+                  className={`relative w-fit max-w-[85%] sm:max-w-[75%] p-2 px-3 rounded-2xl text-xs sm:text-sm shadow mt-2 flex flex-col gap-1 ${
+                    msg.sender === "me"
+                      ? "bg-green-600 text-white rounded-br-none ml-auto"
+                      : "bg-[#2d2d2d] text-gray-200 rounded-bl-none mr-auto"
+                  } group`}
                 >
-                  {/* Media Content */}
                   {msg.media?.url && (
-                    <div className="media-container w-full max-w-[300px] rounded-lg overflow-hidden mb-1">
+                    <div className="w-full max-w-[220px] sm:max-w-[300px] rounded-lg overflow-hidden mb-1">
                       {msg.media.type === "image" && (
                         <img
-                          src={msg.media.url.startsWith("http") ? msg.media.url : `${baseUrl}${msg.media.url}`}
+                          src={
+                            msg.media.url.startsWith("http")
+                              ? msg.media.url
+                              : `${baseUrl}${msg.media.url}`
+                          }
                           alt="message"
                           className="w-full h-auto object-cover cursor-pointer"
-                          onClick={() => window.open(msg.media.url.startsWith("http") ? msg.media.url : `${baseUrl}${msg.media.url}`, "_blank")}
+                          onClick={() =>
+                            window.open(
+                              msg.media.url.startsWith("http")
+                                ? msg.media.url
+                                : `${baseUrl}${msg.media.url}`,
+                              "_blank",
+                            )
+                          }
                         />
                       )}
+
                       {msg.media.type === "video" && (
                         <video
-                          src={msg.media.url.startsWith("http") ? msg.media.url : `${baseUrl}${msg.media.url}`}
+                          src={
+                            msg.media.url.startsWith("http")
+                              ? msg.media.url
+                              : `${baseUrl}${msg.media.url}`
+                          }
                           controls
                           className="w-full h-auto"
                         />
                       )}
+
                       {msg.media.type === "audio" && (
                         <audio
-                          src={msg.media.url.startsWith("http") ? msg.media.url : `${baseUrl}${msg.media.url}`}
+                          src={
+                            msg.media.url.startsWith("http")
+                              ? msg.media.url
+                              : `${baseUrl}${msg.media.url}`
+                          }
                           controls
                           className="w-full"
                         />
                       )}
+
                       {msg.media.type === "file" && (
                         <a
-                          href={msg.media.url.startsWith("http") ? msg.media.url : `${baseUrl}${msg.media.url}`}
+                          href={
+                            msg.media.url.startsWith("http")
+                              ? msg.media.url
+                              : `${baseUrl}${msg.media.url}`
+                          }
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-3 p-3 bg-[#1a1a1a] rounded-lg border border-gray-700 hover:bg-[#252525] transition-colors decoration-none text-inherit"
+                          className="flex items-center gap-2 p-2 bg-[#1a1a1a] rounded-lg border border-gray-700 hover:bg-[#252525] transition-colors text-inherit"
                         >
                           <div className="p-2 bg-[#333] rounded-md shrink-0">
-                            <File size={20} className="text-blue-400" />
+                            <File size={18} className="text-blue-400" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium truncate">{msg.media.name || "File"}</p>
-                            <p className="text-xs text-gray-400">Download</p>
+                            <p className="text-xs sm:text-sm font-medium truncate">
+                              {msg.media.name || "File"}
+                            </p>
+                            <p className="text-[10px] text-gray-400">
+                              Download
+                            </p>
                           </div>
-                          <Download size={18} className="text-gray-400 shrink-0" />
+                          <Download
+                            size={16}
+                            className="text-gray-400 shrink-0"
+                          />
                         </a>
                       )}
                     </div>
                   )}
 
-                  {/* Text CONTENT & META INFO */}
-                  <div className="flex flex-col min-w-[80px]">
+                  <div className="flex flex-col min-w-[60px] sm:min-w-[80px]">
                     {msg.text && (
-                      <p className="whitespace-pre-wrap leading-relaxed pr-2">
+                      <p className="whitespace-pre-wrap leading-relaxed pr-1 sm:pr-2">
                         {msg.text}
                       </p>
                     )}
 
                     <div className="flex items-center justify-end gap-1 self-end mt-1">
-                      <span className="text-[10px] opacity-70 leading-none select-none">
+                      <span className="text-[9px] sm:text-[10px] opacity-70">
                         {Timeformate(msg.createdAt)}
                       </span>
                       {msg.sender === "me" && (
-                        <span className="text-xs leading-none">
+                        <span className="text-[10px] sm:text-xs">
                           {msg.seen ? "✓✓" : "✓"}
                         </span>
                       )}
                     </div>
                   </div>
 
-                  {/* OPTIONS MENU BUTTON */}
-                  <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <div className="absolute top-1 right-1 sm:top-2 sm:right-2 opacity-0 group-hover:opacity-100 sm:group-hover:opacity-100 transition-opacity">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        setSelectedMsg(selectedMsg === msg._id ? null : msg._id);
+                        setSelectedMsg(
+                          selectedMsg === msg._id ? null : msg._id,
+                        );
                       }}
-                      className="text-white/50 hover:text-white p-1 rounded-full bg-black/20 hover:bg-black/40 transition-colors"
+                      className="text-white/50 hover:text-white p-1 rounded-full bg-black/20 hover:bg-black/40"
                     >
                       <MoreVertical size={14} />
                     </button>
@@ -348,31 +415,31 @@ function Message({ user }) {
                   {selectedMsg === msg._id && (
                     <div
                       ref={optionsMenuRef}
-                      className="absolute min-w-[120px] bg-[#2a2a2a] text-white rounded-lg shadow-lg border border-gray-700 z-50 overflow-hidden animate-fadeIn"
+                      className="absolute min-w-[110px] sm:min-w-[120px] bg-[#2a2a2a] text-white rounded-lg shadow-lg border border-gray-700 z-50 overflow-hidden"
                       style={{
-                        top: "32px",
+                        top: "30px",
                         right: msg.sender === "me" ? "0px" : "auto",
                         left: msg.sender === "other" ? "0px" : "auto",
                       }}
                     >
                       <button
-                        className="w-full flex items-center gap-2 px-4 py-2 hover:bg-gray-600 transition-colors"
+                        className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-gray-600"
                         onClick={() => {
                           navigator.clipboard.writeText(msg.text);
                           setSelectedMsg(null);
                         }}
                       >
-                        <Copy size={16} /> Copy
+                        <Copy size={14} /> Copy
                       </button>
 
                       <button
-                        className="w-full flex items-center gap-2 px-4 py-2 hover:bg-red-600 transition-colors"
+                        className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-red-600"
                         onClick={() => {
                           handleDelete(msg._id);
                           setSelectedMsg(null);
                         }}
                       >
-                        <Trash2 size={16} /> Delete
+                        <Trash2 size={14} /> Delete
                       </button>
                     </div>
                   )}
@@ -383,33 +450,36 @@ function Message({ user }) {
         </div>
       </div>
 
-      <div className="p-4 bg-[#262626] border-t border-[#333] flex items-center gap-3">
-        <label className="p-1 rounded-full hover:bg-gray-700 cursor-pointer">
-          <Plus className="text-gray-300 hover:text-white" />
-          <input
-            type="file"
-            onChange={handleImage}
-            className="hidden"
-          />
-
+      <div className="p-2 md:p-4 bg-[#262626] border-t border-[#333] flex items-center gap-2 md:gap-3 shrink-0">
+        <label className="p-2 rounded-full hover:bg-gray-700 cursor-pointer shrink-0">
+          <Plus className="text-gray-300 hover:text-white" size={20} />
+          <input type="file" onChange={handleImage} className="hidden" />
         </label>
+
         <div className="relative w-full flex items-center">
           {showEmojiPicker && (
-            <div ref={emojiPickerRef} className="absolute bottom-16 left-0 z-50">
+            <div
+              ref={emojiPickerRef}
+              className="absolute bottom-14 left-0 z-50"
+            >
               <EmojiPicker
                 theme="dark"
                 onEmojiClick={onEmojiClick}
                 autoFocusSearch={false}
+                width={window.innerWidth < 768 ? window.innerWidth - 20 : 350}
+                height={window.innerWidth < 768 ? 380 : 450}
               />
             </div>
           )}
+
           <button
             type="button"
             onClick={() => setShowEmojiPicker(!showEmojiPicker)}
             className="absolute left-3 text-gray-400 hover:text-yellow-400 transition-colors z-10"
           >
-            <Smile size={22} />
+            <Smile size={20} />
           </button>
+
           <input
             type="text"
             value={text}
@@ -418,16 +488,16 @@ function Message({ user }) {
               handleTyping();
             }}
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
-            placeholder="Send message"
-            className="w-full p-3 pl-12 pr-12 rounded-xl bg-[#333] text-white outline-none focus:ring-1 focus:ring-green-500"
+            placeholder="Message"
+            className="w-full py-2.5 md:py-3 pl-10 md:pl-12 pr-3 rounded-xl bg-[#333] text-white outline-none focus:ring-1 focus:ring-green-500 text-sm md:text-base"
           />
         </div>
 
         <button
           onClick={() => handleSend()}
-          className="w-10 h-10 p-2 bg-green-500 rounded-full cursor-pointer hover:bg-green-600 text-black"
+          className="w-9 h-9 md:w-10 md:h-10 bg-green-500 rounded-full cursor-pointer hover:bg-green-600 text-black shrink-0 flex items-center justify-center"
         >
-          <Send size={20} />
+          <Send size={18} />
         </button>
       </div>
     </div>
